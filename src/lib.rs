@@ -7,6 +7,7 @@ pub mod effects;
 pub type Pixels<T: IntoColor<Rgba>> = Vec<T>;
 
 // TODO: ModR should a Vec of anything that can be converted to Color
+#[derive(Debug)]
 pub enum ModR<T> {
 	/// Update specified pixels
 	Pixels(Pixels<T>),

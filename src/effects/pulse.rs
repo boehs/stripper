@@ -4,11 +4,16 @@ use crate::{primitives::tween::Easing, ModR, Module, Pixels};
 
 // TODO: Don't assume 100% brightness
 
+/// Pulses brightness of input pixels.
 pub struct Pulse<T: Easing<f64>> {
-    first: u32,
-    duration: u32,
-    intensity: f64,
-    function: T,
+    /// The index at time of ::new call
+    pub first: u32,
+    /// How long a completion will take
+    pub duration: u32,
+    /// The minimum value
+    pub intensity: f64,
+    /// The easing function
+    pub function: T,
 }
 
 impl<E: Easing<f64>> Module<Pulse<E>> for Pulse<E> {
@@ -39,11 +44,12 @@ impl<E: Easing<f64>> Module<Pulse<E>> for Pulse<E> {
     }
 }
 
+/// Same as pulse, but also goes out
 pub struct Beat<T: Easing<f64>> {
-    first: u32,
-    duration: u32,
-    intensity: f64,
-    function: T,
+    pub first: u32,
+    pub duration: u32,
+    pub intensity: f64,
+    pub function: T,
     // delay
 }
 
