@@ -6,6 +6,7 @@ pub mod effects;
 
 pub type Pixels = Vec<RGB8>;
 
+// TODO: ModR should a Vec of anything that can be converted to Color
 pub enum ModR {
 	/// Update specified pixels
 	Some(Pixels),
