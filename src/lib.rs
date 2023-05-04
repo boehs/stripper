@@ -19,5 +19,5 @@ pub enum ModR<T> {
 
 pub trait Module<T, C = Rgba> {
 	fn new(input: T) -> Self;
-	fn render(&self, i: u32, pixels: &Pixels<Rgba>) -> ModR<C>;
+	fn render(&mut self, i: u32, pixels: &Pixels<Rgba>) -> ModR<C>;
 }

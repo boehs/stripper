@@ -21,7 +21,7 @@ impl<E: Easing<f64>> Module<Pulse<E>> for Pulse<E> {
         input
     }
     // TODO: I doubt this actually works
-    fn render(&self, i: u32, pixels: &Pixels<Rgba>) -> ModR<Rgba> {
+    fn render(&mut self, i: u32, pixels: &Pixels<Rgba>) -> ModR<Rgba> {
         if i - self.first >= self.duration {
             return ModR::Kill;
         }
@@ -58,7 +58,7 @@ impl<E: Easing<f64>> Module<Beat<E>> for Beat<E> {
         input
     }
 
-    fn render(&self, i: u32, pixels: &Pixels<Rgba>) -> ModR<Rgba> {
+    fn render(&mut self, i: u32, pixels: &Pixels<Rgba>) -> ModR<Rgba> {
         if i - self.first >= self.duration * 2 {
             return ModR::Kill;
         }
