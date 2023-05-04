@@ -1,22 +1,22 @@
-use smart_leds::RGB8;
+use palette::{rgb::{Rgba}, IntoColor};
 
 pub mod primitives;
 pub mod scene;
 pub mod effects;
 
-pub type Pixels = Vec<RGB8>;
+pub type Pixels<T: IntoColor<Rgba>> = Vec<T>;
 
 // TODO: ModR should a Vec of anything that can be converted to Color
-pub enum ModR {
+pub enum ModR<T> {
 	/// Update specified pixels
-	Some(Pixels),
+	Pixels(Pixels<T>),
 	/// Do nothing (loop again)
-	None,
+	Pass,
 	/// Kill (stop & reset i)
 	Kill
 }
 
-pub trait Module<T> {
+pub trait Module<T, C = Rgba> {
 	fn new(input: T) -> Self;
-	fn render(&self, i: u32, pixels: &Pixels) -> ModR;
+	fn render(&self, i: u32, pixels: &Pixels<Rgba>) -> ModR<C>;
 }
