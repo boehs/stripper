@@ -3,6 +3,7 @@ use palette::{rgb::{Rgba}, IntoColor};
 pub mod primitives;
 pub mod scene;
 pub mod effects;
+pub mod runtime;
 
 pub type Pixels<T: IntoColor<Rgba>> = Vec<T>;
 

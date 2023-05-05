@@ -10,7 +10,7 @@ fn pulse() {
     });
     let mut pixels: Vec<Rgba> = Vec::new();
     pixels.push(Rgba::new(10.0, 20.0, 30.0, 1.0));
-    for i in (0..100) {
+    for i in 0..100 {
         let render = pulser.render(i, &pixels);
         println!("{:?}", render)
     }
@@ -25,7 +25,7 @@ fn breath() {
     });
     let mut pixels: Vec<Rgba> = Vec::new();
     pixels.push(Rgba::new(10.0, 20.0, 30.0, 1.0));
-    for i in (0..50) {
+    for i in 0..50 {
         let render = pulser.render(i, &pixels);
         println!("{:?}", render)
     }
@@ -43,7 +43,7 @@ fn with_looper() {
     let mut pl = looper::WithReset::new(WithResetI {
         fun: |x,pixels| pulser.render(x, &pixels)
     });
-    for i in (0..10) {
+    for i in 0..10 {
         let render = pl.render(i,&pixels);
         println!("{:?}", render)
     }
