@@ -1,24 +1,23 @@
-use palette::{rgb::{Rgba}, IntoColor};
+use palette::rgb::{Rgba};
 
 pub mod primitives;
 pub mod scene;
 pub mod effects;
-pub mod runtime;
 
-pub type Pixels<T: IntoColor<Rgba>> = Vec<T>;
+pub type Pixels = Vec<Rgba>;
 
 // TODO: ModR should a Vec of anything that can be converted to Color
 #[derive(Debug)]
-pub enum ModR<T> {
+pub enum ModR {
 	/// Update specified pixels
-	Pixels(Pixels<T>),
+	Pixels(Pixels),
 	/// Do nothing (loop again)
 	Pass,
 	/// Kill (stop & reset i)
 	Kill
 }
 
-pub trait Module<T, C = Rgba> {
+pub trait Module<T> {
 	fn new(input: T) -> Self;
-	fn render(&mut self, i: u32, pixels: &Pixels<Rgba>) -> ModR<C>;
+	fn render(&mut self, i: u32, pixels: &Pixels) -> ModR;
 }

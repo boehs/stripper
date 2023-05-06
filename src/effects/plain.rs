@@ -9,7 +9,7 @@ impl Module<()> for Off {
         Self
     }
 
-    fn render(&mut self, i: u32, pixels: &Pixels<Rgba>) -> ModR<Rgba> {
+    fn render(&mut self, i: u32, pixels: &Pixels) -> ModR {
         pixels.fill(Rgba::new(0.0, 0.0, 0.0, 0.0));
         ModR::Pixels(pixels.to_owned())
     }
@@ -21,7 +21,7 @@ impl Module<Rgba> for Rgba {
         input
     }
 
-    fn render(&mut self, i: u32, pixels: &Pixels<Rgba>) -> ModR<Rgba> {
+    fn render(&mut self, i: u32, pixels: &Pixels) -> ModR {
         pixels.fill(*self);
         ModR::Pixels(pixels.to_owned())
     }

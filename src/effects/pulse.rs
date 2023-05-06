@@ -1,5 +1,3 @@
-use palette::rgb::Rgba;
-
 use crate::{primitives::tween::Easing, ModR, Module, Pixels};
 
 // TODO: Don't assume 100% brightness
@@ -21,7 +19,7 @@ impl<E: Easing<f64>> Module<Pulse<E>> for Pulse<E> {
         input
     }
     // TODO: I doubt this actually works
-    fn render(&mut self, i: u32, pixels: &Pixels<Rgba>) -> ModR<Rgba> {
+    fn render(&mut self, i: u32, pixels: &Pixels) -> ModR {
         if i - self.first >= self.duration {
             return ModR::Kill;
         }
@@ -58,7 +56,7 @@ impl<E: Easing<f64>> Module<Beat<E>> for Beat<E> {
         input
     }
 
-    fn render(&mut self, i: u32, pixels: &Pixels<Rgba>) -> ModR<Rgba> {
+    fn render(&mut self, i: u32, pixels: &Pixels) -> ModR {
         if i - self.first >= self.duration * 2 {
             return ModR::Kill;
         }

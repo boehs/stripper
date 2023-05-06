@@ -1,21 +1,19 @@
-use palette::{rgb::Rgba, IntoColor};
-
 use crate::{ModR, Module, Pixels};
 
-pub struct WithResetI<R, F: FnMut(u32, &Pixels<Rgba>) -> ModR<R>> {
+pub struct WithResetI<F: FnMut(u32, &Pixels) -> ModR> {
     pub fun: F,
 }
-pub struct WithReset<R, F: FnMut(u32, &Pixels<Rgba>) -> ModR<R>> {
+pub struct WithReset<F: FnMut(u32, &Pixels) -> ModR> {
     i: u32,
     f: F,
 }
 
-impl<T, F: FnMut(u32, &Pixels<Rgba>) -> ModR<T>> Module<WithResetI<T, F>, T> for WithReset<T, F> {
-    fn new(input: WithResetI<T, F>) -> Self {
+impl<F: FnMut(u32, &Pixels) -> ModR> Module<WithResetI<F>> for WithReset<F> {
+    fn new(input: WithResetI<F>) -> Self {
         WithReset { i: 0, f: input.fun }
     }
 
-    fn render(&mut self, i: u32, pixels: &Pixels<Rgba>) -> ModR<T> {
+    fn render(&mut self, i: u32, pixels: &Pixels) -> ModR {
         loop {
             let res = (self.f)(self.i, pixels);
             self.i = match res {
