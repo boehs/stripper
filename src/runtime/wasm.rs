@@ -47,4 +47,8 @@ impl Runtime<WasmInit> for Wasm {
         }
         Ok(())
     }
+
+    fn get_number_of_pixels(&self) -> u16 {
+        self.pixels.len() as u16
+    }
 }
