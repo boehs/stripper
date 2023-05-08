@@ -24,7 +24,7 @@ impl Weather for Rain {
         let mut rng = rand::rngs::SmallRng::from_entropy();
         // Every pixel has a 1/10 chance every second to be added
         for i in 0..pixel_size {
-            if rng.gen_ratio(1, 10 * 30) {
+            if rng.gen_ratio(1, 25 * 30) {
                 self.drops
                     .push_back((i, rng.gen_range(70..=100) as f32 * 0.01))
             }
@@ -34,7 +34,7 @@ impl Weather for Rain {
             if self.drops[i].1 == 0.00 {
                 self.drops.remove(i);
             }
-            self.drops[i].1 = self.drops[i].1 + 0.01
+            self.drops[i].1 = self.drops[i].1 - 0.01
         }
         canvas
     }

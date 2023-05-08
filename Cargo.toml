@@ -19,6 +19,7 @@ palette = { version="0.7.1", features=["named", "named_from_str", "approx", "lib
 kmeans_colors = { version="0.5.0", features=["palette_color"] }
 easer = { version="0.3.0", features=["libm"] }
 rand = { version="0.8.5", features=["small_rng"] }
+wasm-timer = "0.2.5"
 
 [dependencies.web-sys]
 version = "0.3.4"
