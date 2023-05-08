@@ -1,5 +1,4 @@
 use super::Runtime;
-use palette::rgb::Rgba;
 use wasm_bindgen::prelude::*;
 use web_sys::HtmlElement;
 
@@ -31,7 +30,7 @@ impl Runtime<WasmInit> for Wasm {
         }
         Self { pixels: elements }
     }
-    fn display(&self, pixels: crate::Pixels<Rgba>) -> Result<(), Box<dyn std::error::Error>> {
+    fn display(&self, pixels: crate::Pixels) -> Result<(), Box<dyn std::error::Error>> {
         for (i, pixel) in self.pixels.iter().enumerate() {
             let color = pixels[i];
             pixel
