@@ -6,7 +6,7 @@
 
 <body>
     <script>
-                for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 15*15; i++) {
             const pix = document.createElement("div")
             pix.classList.add("pix")
             document.body.appendChild(pix)
@@ -25,14 +25,16 @@
 <style>
     body {
         display: grid;
-        grid-template-rows: repeat(10, 1fr);
-        grid-template-columns: repeat(10, 1fr);
+        grid-template-rows: repeat(15, 1fr);
+        grid-template-columns: repeat(15, 1fr);
         gap: 5px;
-        color: black;
+        background-color: black;
     }
 
     .pix {
+        border-radius: 5px;
         background-color: var(--color);
+        box-shadow: 0 0 10px 0px var(--color);
     }
 
 </style>

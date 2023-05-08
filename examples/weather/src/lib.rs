@@ -2,16 +2,23 @@ use std::collections::VecDeque;
 
 use rand::{Rng, SeedableRng};
 use stripper::{
-    primitives::color::{Rgba, Mix},
+    primitives::color::{Mix, Rgba},
     runtime::{self, wasm::WasmInit, Runtime},
     Module, Pixels,
 };
 use wasm_bindgen::prelude::wasm_bindgen;
 
+#[derive(PartialEq)]
+enum Timeframe {
+    Never,
+    Sometimes,
+}
+
 struct Rain {
     drops: VecDeque<(usize, f32)>,
     drop_color: Rgba,
     bg_color: Rgba,
+    lightning: Timeframe,
 }
 
 trait Weather {
@@ -22,19 +29,26 @@ impl Weather for Rain {
     fn simulate(&mut self, i: u32, pixel_size: usize) -> Pixels {
         let mut canvas = vec![self.bg_color; pixel_size];
         let mut rng = rand::rngs::SmallRng::from_entropy();
-        // Every pixel has a 1/10 chance every second to be added
-        for i in 0..pixel_size {
-            if rng.gen_ratio(1, 25 * 30) {
-                self.drops
-                    .push_back((i, rng.gen_range(70..=100) as f32 * 0.01))
-            }
+        if i % 3 == 0 {
+            self.drops.push_back((
+                rng.gen_range(0..pixel_size),
+                rng.gen_range(70..=100) as f32 * 0.01,
+            ));
         }
         for (i, drop) in self.drops.clone().iter().enumerate() {
             canvas[drop.0] = self.bg_color.mix(self.drop_color, drop.1);
             if self.drops[i].1 == 0.00 {
                 self.drops.remove(i);
             }
-            self.drops[i].1 = self.drops[i].1 - 0.01
+            self.drops[i].1 = self.drops[i].1 - 0.02
+        }
+        if (i % 70) > 19 && self.lightning == Timeframe::Sometimes {
+            canvas = canvas.iter().map(|&p| {
+                p.mix(
+                    Rgba::new(255.0, 255.0, 255.0, 1.0),
+                    1.0 - (0.05 * ((i % 70) - 19) as f32),
+                )
+            }).collect::<Vec<_>>();
         }
         canvas
     }
@@ -52,8 +66,9 @@ impl Module for WeatherD {
         WeatherD {
             instance: Box::new(Rain {
                 drops: vec![].into(),
-                drop_color: Rgba::new(112.0, 200.0, 230.0, 1.0),
-                bg_color: Rgba::new(39.0, 95.0, 115.0, 1.0),
+                drop_color: Rgba::new(107.0, 137.0, 148.0, 1.0),
+                bg_color: Rgba::new(62.0, 76.0, 93.0, 1.0),
+                lightning: Timeframe::Sometimes
             }),
         }
     }
