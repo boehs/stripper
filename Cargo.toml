@@ -29,7 +29,8 @@ features = [
   'Node',
   'NodeList',
   'Window',
-  'CssStyleDeclaration'
+  'CssStyleDeclaration',
+  'console'
 ]
 optional = true
 

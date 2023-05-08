@@ -69,7 +69,7 @@ fn main() {
     runtime::common::run(
         Box::new(WeatherD::update("".to_string())),
         Box::new(runtime::wasm::Wasm::new(WasmInit {
-            selector: "pix".to_string(),
+            selector: ".pix".to_string(),
         })),
     )
 }
