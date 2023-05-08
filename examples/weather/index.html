@@ -1,0 +1,39 @@
+<html>
+
+<head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
+</head>
+
+<body>
+    <script>
+                for (let i = 0; i < 100; i++) {
+            const pix = document.createElement("div")
+            pix.classList.add("pix")
+            document.body.appendChild(pix)
+        }
+    </script>
+    <script type="module">
+        import init from './pkg/weather.js';
+
+        async function run() {
+            await init("pkg/weather_bg.wasm");
+        }
+
+        run();
+    </script>
+</body>
+<style>
+    body {
+        display: grid;
+        grid-template-rows: repeat(10, 1fr);
+        grid-template-columns: repeat(10, 1fr);
+        gap: 5px;
+        color: black;
+    }
+
+    .pix {
+    }
+
+</style>
+
+</html>

@@ -129,8 +129,10 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c85e1d9ab2eadba7e5040d4e09cbd6d072b76a557ad64e797c2cb9d4da21d7e4"
 dependencies = [
  "cfg-if",
+ "js-sys",
  "libc",
  "wasi",
+ "wasm-bindgen",
 ]
 
 [[package]]
@@ -491,6 +493,7 @@ dependencies = [
  "easer",
  "kmeans_colors",
  "palette 0.7.1",
+ "rand",
  "smart-leds",
  "wasm-bindgen",
  "web-sys",
@@ -643,6 +646,17 @@ name = "wasm-bindgen-shared"
 version = "0.2.84"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0046fef7e28c3804e5e38bfa31ea2a0f73905319b677e57ebe37e49358989b5d"
+
+[[package]]
+name = "weather"
+version = "0.1.0"
+dependencies = [
+ "getrandom",
+ "rand",
+ "stripper",
+ "wasm-bindgen",
+ "web-sys",
+]
 
 [[package]]
 name = "web-sys"

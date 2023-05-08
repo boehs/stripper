@@ -2,7 +2,6 @@ use palette::rgb::{Rgba};
 
 pub mod primitives;
 pub mod scene;
-pub mod effects;
 pub mod runtime;
 
 pub type Pixels = Vec<Rgba>;
@@ -18,7 +17,7 @@ pub enum ModR {
 	Kill
 }
 
-pub trait Module<T> {
-	fn new(input: T) -> Self;
+pub trait Module {
+	fn update(input: String) -> Self where Self: Sized;
 	fn render(&mut self, i: u32, pixels: &Pixels) -> ModR;
 }
