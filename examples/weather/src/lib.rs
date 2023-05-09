@@ -57,6 +57,7 @@ impl Weather for Rain {
     }
 }
 
+#[derive(PartialEq)]
 enum SunType {
     Sunny,
     Mixed,
@@ -66,12 +67,26 @@ enum SunType {
 
 impl Weather for SunType {
     fn simulate(&mut self, i: u32, pixel_size: usize) -> Pixels {
-        let mut canvas = vec![Rgba::new(107.0, 212.0, 214.0, 1.0); pixel_size];
-        ripple(((i % pixel_size as u32)) as u16, Rgba::new(245.0, 183.0, 112.0, 1.0), 7, &mut canvas);
-        ripple(20, Rgba::new(255.0, 255.0, 255.0, 1.0), 6, &mut canvas);
-        ripple(70, Rgba::new(255.0, 255.0, 255.0, 1.0), 6, &mut canvas);
-        ripple(130, Rgba::new(255.0, 255.0, 255.0, 1.0), 6, &mut canvas);
-        ripple(180, Rgba::new(255.0, 255.0, 255.0, 1.0), 6, &mut canvas);
+        let bg: Rgba = if self == &SunType::Overcast {
+            Rgba::new(220.0, 220.0, 220.0, 1.0)
+        } else {
+            Rgba::new(107.0, 212.0, 214.0, 1.0)
+        };
+        let mut canvas = vec![bg; pixel_size];
+        if self == &SunType::Mixed || self == &SunType::Sunny {
+            ripple(
+                (i % pixel_size as u32) as u16,
+                Rgba::new(245.0, 183.0, 112.0, 1.0),
+                7,
+                &mut canvas,
+            );
+        }
+        if self != &SunType::Sunny {
+            ripple(20, Rgba::new(255.0, 255.0, 255.0, 1.0), 6, &mut canvas);
+            ripple(70, Rgba::new(255.0, 255.0, 255.0, 1.0), 6, &mut canvas);
+            ripple(130, Rgba::new(255.0, 255.0, 255.0, 1.0), 6, &mut canvas);
+            ripple(180, Rgba::new(255.0, 255.0, 255.0, 1.0), 6, &mut canvas);
+        }
         canvas
     }
 }
@@ -86,7 +101,25 @@ impl Module for WeatherD {
         Self: Sized,
     {
         WeatherD {
-            instance: Box::new(SunType::Sunny),
+            instance: match input.as_str() {
+                "rainy" => Box::new(Rain {
+                    drops: vec![].into(),
+                    drop_color: Rgba::new(107.0, 137.0, 148.0, 1.0),
+                    bg_color: Rgba::new(62.0, 76.0, 93.0, 1.0),
+                    lightning: Timeframe::Never,
+                }),
+                "lightning" => Box::new(Rain {
+                    drops: vec![].into(),
+                    drop_color: Rgba::new(107.0, 137.0, 148.0, 1.0),
+                    bg_color: Rgba::new(62.0, 76.0, 93.0, 1.0),
+                    lightning: Timeframe::Sometimes,
+                }),
+                "sunny" => Box::new(SunType::Sunny),
+                "mixed" => Box::new(SunType::Mixed),
+                "cloudy" => Box::new(SunType::Cloudy),
+                "overcast" => Box::new(SunType::Overcast),
+                _ => Box::new(SunType::Sunny),
+            },
         }
     }
 
@@ -99,7 +132,7 @@ impl Module for WeatherD {
 fn main() {
     web_sys::console::log_1(&"done".into());
     runtime::common::run(
-        Box::new(WeatherD::update("".to_string())),
+        Box::new(WeatherD::update("lightning".to_string())),
         Box::new(runtime::wasm::Wasm::new(WasmInit {
             selector: ".pix".to_string(),
         })),

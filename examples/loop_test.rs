@@ -1,5 +1,5 @@
 use palette::rgb::Rgba;
-use stripper::{effects::{pulse::{self, Pulse, Beat}, looper::{self, WithResetI}}, Module, primitives::tween};
+use stripper::{effects::{pulse::{self, Pulse, Beat}, looper::{self, WithResetI}}, primitives::tween};
 
 fn pulse() {
     let mut pulser = pulse::Pulse::new(Pulse {
