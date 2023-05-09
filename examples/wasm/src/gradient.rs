@@ -1,12 +1,12 @@
 use std::str::FromStr;
 
 use enterpolation::{
-    linear::{ConstEquidistantLinear, Linear},
-    ConstEquidistant, Curve,
+    linear::ConstEquidistantLinear,
+    Curve,
 };
 use stripper::{
     primitives::color::{
-        rgb::{self, Rgb},
+        rgb::Rgb,
         Alpha, FromColor, Hsl, LinSrgb, Rgba, Srgb, Srgba, WithAlpha,
     },
     ModR, Module, Pixels,
@@ -15,7 +15,7 @@ use stripper::{
 pub struct Rainbow;
 
 impl Module for Rainbow {
-    fn update(input: String) -> Self
+    fn update(_input: String) -> Self
     where
         Self: Sized,
     {
