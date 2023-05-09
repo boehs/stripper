@@ -1,3 +1,5 @@
+use std::str::FromStr;
+
 use enterpolation::{
     linear::{ConstEquidistantLinear, Linear},
     ConstEquidistant, Curve,
@@ -48,8 +50,7 @@ impl Module for Gradient {
     {
         let colors = input
             .split(",")
-            .flat_map(|c| u32::from_str_radix(c.trim_start_matches("#"), 16))
-            .map(|x| LinSrgb::from_u32::<rgb::channels::Rgba>(x).into_format::<f32>())
+            .flat_map(|x| Srgb::from_str(x.trim_start()).map(|c| c.into_linear()))
             .collect::<Vec<_>>();
         Gradient(colors)
     }
