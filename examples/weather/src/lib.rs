@@ -58,22 +58,22 @@ impl Weather for Rain {
 }
 
 #[derive(PartialEq)]
-enum SunType {
+enum Sun {
     Sunny,
     Mixed,
     Cloudy,
     Overcast,
 }
 
-impl Weather for SunType {
+impl Weather for Sun {
     fn simulate(&mut self, i: u32, pixel_size: usize) -> Pixels {
-        let bg: Rgba = if self == &SunType::Overcast {
+        let bg: Rgba = if self == &Sun::Overcast {
             Rgba::new(220.0, 220.0, 220.0, 1.0)
         } else {
             Rgba::new(107.0, 212.0, 214.0, 1.0)
         };
         let mut canvas = vec![bg; pixel_size];
-        if self == &SunType::Mixed || self == &SunType::Sunny {
+        if self == &Sun::Mixed || self == &Sun::Sunny {
             ripple(
                 (i % pixel_size as u32) as u16,
                 Rgba::new(245.0, 183.0, 112.0, 1.0),
@@ -81,7 +81,7 @@ impl Weather for SunType {
                 &mut canvas,
             );
         }
-        if self != &SunType::Sunny {
+        if self != &Sun::Sunny {
             ripple(20, Rgba::new(255.0, 255.0, 255.0, 1.0), 6, &mut canvas);
             ripple(70, Rgba::new(255.0, 255.0, 255.0, 1.0), 6, &mut canvas);
             ripple(130, Rgba::new(255.0, 255.0, 255.0, 1.0), 6, &mut canvas);
@@ -114,11 +114,11 @@ impl Module for WeatherD {
                     bg_color: Rgba::new(62.0, 76.0, 93.0, 1.0),
                     lightning: Timeframe::Sometimes,
                 }),
-                "sunny" => Box::new(SunType::Sunny),
-                "mixed" => Box::new(SunType::Mixed),
-                "cloudy" => Box::new(SunType::Cloudy),
-                "overcast" => Box::new(SunType::Overcast),
-                _ => Box::new(SunType::Sunny),
+                "sunny" => Box::new(Sun::Sunny),
+                "mixed" => Box::new(Sun::Mixed),
+                "cloudy" => Box::new(Sun::Cloudy),
+                "overcast" => Box::new(Sun::Overcast),
+                _ => Box::new(Sun::Sunny),
             },
         }
     }
