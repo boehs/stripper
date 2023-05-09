@@ -21,6 +21,7 @@ impl Module for Rainbow {
             .map(|x| {
                 let c = Hsl::new_srgb(((steps * x as f32) + i as f32) % 360.0, 1.0, 0.5);
                 let b: Alpha<Rgb, f32> = Rgba::from_color(c).into_format();
+                // I don't like this. Find better way.
                 Srgba::new(b.red * 255.0, b.green * 255.0, b.blue * 255.0, b.alpha)
             })
             .collect();
