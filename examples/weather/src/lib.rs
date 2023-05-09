@@ -2,7 +2,7 @@ use std::collections::VecDeque;
 
 use rand::{Rng, SeedableRng};
 use stripper::{
-    primitives::color::{Mix, Rgba},
+    primitives::color::{ripple, Mix, Rgba},
     runtime::{self, wasm::WasmInit, Runtime},
     Module, Pixels,
 };
@@ -43,13 +43,35 @@ impl Weather for Rain {
             self.drops[i].1 = self.drops[i].1 - 0.02
         }
         if (i % 70) > 19 && self.lightning == Timeframe::Sometimes {
-            canvas = canvas.iter().map(|&p| {
-                p.mix(
-                    Rgba::new(255.0, 255.0, 255.0, 1.0),
-                    1.0 - (0.05 * ((i % 70) - 19) as f32),
-                )
-            }).collect::<Vec<_>>();
+            canvas = canvas
+                .iter()
+                .map(|&p| {
+                    p.mix(
+                        Rgba::new(255.0, 255.0, 255.0, 1.0),
+                        0.5 - (0.025 * ((i % 70) - 19) as f32),
+                    )
+                })
+                .collect::<Vec<_>>();
         }
+        canvas
+    }
+}
+
+enum SunType {
+    Sunny,
+    Mixed,
+    Cloudy,
+    Overcast,
+}
+
+impl Weather for SunType {
+    fn simulate(&mut self, i: u32, pixel_size: usize) -> Pixels {
+        let mut canvas = vec![Rgba::new(107.0, 212.0, 214.0, 1.0); pixel_size];
+        ripple(((i % pixel_size as u32)) as u16, Rgba::new(245.0, 183.0, 112.0, 1.0), 7, &mut canvas);
+        ripple(20, Rgba::new(255.0, 255.0, 255.0, 1.0), 6, &mut canvas);
+        ripple(70, Rgba::new(255.0, 255.0, 255.0, 1.0), 6, &mut canvas);
+        ripple(130, Rgba::new(255.0, 255.0, 255.0, 1.0), 6, &mut canvas);
+        ripple(180, Rgba::new(255.0, 255.0, 255.0, 1.0), 6, &mut canvas);
         canvas
     }
 }
@@ -64,12 +86,7 @@ impl Module for WeatherD {
         Self: Sized,
     {
         WeatherD {
-            instance: Box::new(Rain {
-                drops: vec![].into(),
-                drop_color: Rgba::new(107.0, 137.0, 148.0, 1.0),
-                bg_color: Rgba::new(62.0, 76.0, 93.0, 1.0),
-                lightning: Timeframe::Sometimes
-            }),
+            instance: Box::new(SunType::Sunny),
         }
     }
 
