@@ -37,5 +37,5 @@ optional = true
 
 [workspace]
 members = [
-  "examples/weather"
+  "examples/wasm"
 ]

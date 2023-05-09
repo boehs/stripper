@@ -1,5 +1,5 @@
 [package]
-name = "weather"
+name = "wasm"
 version = "0.1.0"
 authors = ["Evan Boehs"]
 edition = "2021"
