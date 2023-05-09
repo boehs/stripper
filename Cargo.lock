@@ -18,6 +18,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "assert_float_eq"
+version = "1.1.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4cea652ffbedecf29e9cd41bb4c066881057a42c0c119040f022802b26853e77"
+
+[[package]]
 name = "autocfg"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -86,6 +92,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fba524f8b83c9c5bde02c2bb1627de9d1f81980489a6d54168cdfd08c258f917"
 dependencies = [
  "num-traits",
+]
+
+[[package]]
+name = "enterpolation"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "dedc91505dc06c0969a1488e2177867119ee63be97de98bd47dcfaa07cc97813"
+dependencies = [
+ "assert_float_eq",
+ "num-traits",
+ "topology-traits",
 ]
 
 [[package]]
@@ -746,6 +763,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "topology-traits"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6f34076ac0a15d54be52883b0987cb1b35dddede52ce4003c7a3a3490a9252ec"
+dependencies = [
+ "num-traits",
+]
+
+[[package]]
 name = "unicode-ident"
 version = "1.0.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -779,6 +805,7 @@ checksum = "9c8d87e72b64a3b4db28d11ce29237c246188f4f51057d65a7eab63b7987e423"
 name = "wasm"
 version = "0.1.0"
 dependencies = [
+ "enterpolation",
  "getrandom",
  "rand",
  "stripper",

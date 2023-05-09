@@ -12,6 +12,7 @@ stripper = { path="../../", features=["wasm"] }
 wasm-bindgen = "0.2.84"
 rand = { version="0.8.5", features=["small_rng"] }
 getrandom = { version = "0.2", features = ["js"] }
+enterpolation = "0.2.0"
 [dependencies.web-sys]
 version = "0.3.4"
 features = [
