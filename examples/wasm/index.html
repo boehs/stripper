@@ -5,10 +5,14 @@
 </head>
 
 <body>
+    <div class="overlay">
+        <span>🗿🛝</span>
+    </div>
     <script>
         for (let i = 0; i < 15*15; i++) {
             const pix = document.createElement("div")
             pix.classList.add("pix")
+            pix.style.setProperty('--i',i-((15*15)/2))
             document.body.appendChild(pix)
         }
     </script>
@@ -29,6 +33,7 @@
         grid-template-columns: repeat(15, 1fr);
         gap: 5px;
         background-color: black;
+        margin: 0;
     }
 
     .pix {
@@ -36,8 +41,35 @@
         background-color: var(--color);
         box-shadow: 0 0 10px 0px var(--color);
         border: 3px solid rgba(0,0,0, 0.05);
+        transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
+    .pix::before {
+        counter-increment: pix;
+    }
+
+    .pix:hover {
+        z-index: 99;
+        transform: scale(1.5) rotate(calc(0.5deg * var(--i)));
+    }
+
+    div.overlay {
+        position: absolute;
+        height: 100%;
+        top: 0;
+        width: 100%;
+        pointer-events: none;
+    }
+
+    .overlay > span {
+        display: inline-block;
+        padding: 10px;
+        margin: 10px;
+        font-weight: bold;
+        background: black;
+        color: white;
+        font-family: Helvetica, sans-serif;
+    }
 </style>
 
 </html>
