@@ -23,5 +23,7 @@ features = [
   'NodeList',
   'Window',
   'CssStyleDeclaration',
-  'console'
+  'console',
+  'Location',
+  'UrlSearchParams'
 ]
