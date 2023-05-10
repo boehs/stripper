@@ -42,8 +42,8 @@ impl Module for Rainbow {
 /// When the gradient is spread out, only part of it will be in view.
 /// For instance, a `2.0` multiplier means that only 1/2 of the gradient will be visible at a time
 ///
-/// Spreading the gradient out does not mean slowing the gradient down,
-/// though in practice a full rotation will take longer. It also "zooms in".
+/// Spreading the gradient out will make a loop take longer, but that is because it also "zooms in".
+/// This is probably what you want.
 ///
 /// To slow the gradient down (without changing the view), change the framerate.
 ///
