@@ -1,14 +1,11 @@
 use std::str::FromStr;
 
 use enterpolation::{
-    linear::{ConstEquidistantLinear},
-    Curve,
+    linear::Linear,
+    Curve, Equidistant, Identity,
 };
 use stripper::{
-    primitives::color::{
-        rgb::Rgb,
-        Alpha, FromColor, Hsl, LinSrgb, Rgba, Srgb, Srgba, WithAlpha,
-    },
+    primitives::color::{rgb::Rgb, Alpha, FromColor, Hsl, LinSrgb, Rgba, Srgb, Srgba, WithAlpha},
     ModR, Module, Pixels,
 };
 
@@ -38,11 +35,6 @@ impl Module for Rainbow {
 
 pub struct Gradient(Vec<LinSrgb>);
 
-fn vec_to_arr<T, const N: usize>(v: Vec<T>) -> [T; N] {
-    v.try_into()
-        .unwrap_or_else(|v: Vec<T>| panic!("Expected a Vec of length {} but it was {}", N, v.len()))
-}
-
 impl Module for Gradient {
     fn update(input: String) -> Self
     where
@@ -55,14 +47,18 @@ impl Module for Gradient {
         Gradient(colors)
     }
     fn render(&mut self, i: u32, pixels: &Pixels) -> ModR {
-        let thing =
-            ConstEquidistantLinear::<f32, _, 3>::equidistant_unchecked(vec_to_arr(self.0.clone()));
+        // Better solution! https://github.com/NicolasKlenert/enterpolation/discussions/22
+        let thing = Linear::new_unchecked(
+            self.0.clone(),
+            Equidistant::<f32>::normalized(self.0.len()),
+            Identity::new(),
+        );
         let mut rgba_colors: Vec<Rgba> = thing
             .take(pixels.len())
             .map(|c| Srgba::<f32>::from_linear(c.with_alpha(1.0)))
             .map(|c| Srgba::new(c.red * 255.0, c.green * 255.0, c.blue * 255.0, 1.0))
             .collect();
-        rgba_colors.rotate_right(i as usize % pixels.len());
+        rgba_colors.rotate_right(i as usize);
         ModR::Pixels(rgba_colors)
     }
 }

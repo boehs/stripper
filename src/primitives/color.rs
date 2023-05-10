@@ -1,5 +1,3 @@
-use std::slice::SliceIndex;
-
 pub use palette::{rgb::Rgba, *};
 
 use crate::Pixels;

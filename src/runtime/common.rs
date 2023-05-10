@@ -5,8 +5,9 @@ use crate::{ModR, Module, Pixels};
 
 use super::Runtime;
 
+// Obviously eventually this will not be browser based.
 pub fn run<T: 'static>(mut modules: Box<dyn Module>, runtime: Box<dyn Runtime<T>>) {
-    let mut pixels: Pixels =
+    let pixels: Pixels =
         vec![Rgba::new(0.0, 0.0, 0.0, 0.0); runtime.get_number_of_pixels().into()];
     runtime.display(&pixels);
 
