@@ -38,8 +38,8 @@ impl Runtime<WasmInit> for Wasm {
                 .set_property(
                     "--color",
                     &format!(
-                        "rgba({},{},{},{})",
-                        color.red, color.green, color.blue, color.alpha
+                        "{},{},{}",
+                        color.red as u8, color.green as u8, color.blue as u8
                     ),
                 )
                 .expect(&format!("could not set the style for el {}", i));

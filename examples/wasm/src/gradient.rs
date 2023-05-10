@@ -9,6 +9,7 @@ use stripper::{
 #[deprecated(
     note = "#ff0000, #ff9a00, #d0de21, #4fdc4a, #3fdad8, #2fc9e2, #1c7fee, #5f15f2, #ba0cf8, #fb07d9, #ff0000"
 )]
+/// This module renders a rainbow by
 pub struct Rainbow;
 
 #[allow(deprecated)]
@@ -34,9 +35,33 @@ impl Module for Rainbow {
     }
 }
 
+/// A gradient is linear interpolation between a series of colors.
+/// `x`, equally spaced samples are taken from the gradient. The values are rotated by `i % x` (to move the gradient one right every frame).
+/// By default, `x = pixels.len()`. A multiplier (self.1 >= 1.0) can be applied to `x` "spread the gradient out"
+///
+/// When the gradient is spread out, only part of it will be in view.
+/// For instance, a `2.0` multiplier means that only 1/2 of the gradient will be visible at a time
+///
+/// Spreading the gradient out does not mean slowing the gradient down,
+/// though in practice a full rotation will take longer. It also "zooms in".
+///
+/// To slow the gradient down (without changing the view), change the framerate.
+///
+/// The first `pixels.len()` of the final pixels are visible.
 pub struct Gradient(Vec<LinSrgb>, f64);
 
 impl Module for Gradient {
+    /// Comma seperated hex values, 3 or 6 letters, # optional, whitespace optional.
+    ///
+    /// An optional multiplier (any string that can be parsed to a f64).
+    /// If a multiplier is provided, a `|` should precede it.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// Gradient::update("FFD700,FF69B4,00CED1,FF69B4,FFD700|5".to_string())
+    /// Gradient::update("#fff,#420,#069".to_string())
+    /// ```
     fn update(input: String) -> Self
     where
         Self: Sized,
@@ -50,6 +75,7 @@ impl Module for Gradient {
     }
     fn render(&mut self, i: u32, pixels: &Pixels) -> ModR {
         // Better solution! https://github.com/NicolasKlenert/enterpolation/discussions/22
+        // Move this to update
         let thing = Linear::new_unchecked(
             self.0.clone(),
             Equidistant::<f32>::normalized(self.0.len()),

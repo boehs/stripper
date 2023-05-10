@@ -95,11 +95,21 @@ impl Weather for Sun {
     }
 }
 
+/// Renders a scene representing a type of weather.
+///
+/// * Sun: No clouds. Blue background. Sun, obviously.
+/// * Mixed: Sun, but with clouds.
+/// * Cloudy: Clouds and blue sky. No sun.
+/// * Overcast: Cloudy but sky is gray.
+/// * Rainy: Dark blue scene. Random rain drops.
+/// * Lightning: Rain but with periodic flashes.
+/// * Snowy: todo!
 pub struct WeatherD {
     instance: Box<dyn Weather>,
 }
 
 impl Module for WeatherD {
+    /// Pass one of the weather types as a lowercase string
     fn update(input: String) -> Self
     where
         Self: Sized,
