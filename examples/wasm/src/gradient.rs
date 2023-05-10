@@ -58,7 +58,7 @@ impl Module for Gradient {
             .map(|c| Srgba::<f32>::from_linear(c.with_alpha(1.0)))
             .map(|c| Srgba::new(c.red * 255.0, c.green * 255.0, c.blue * 255.0, 1.0))
             .collect();
-        rgba_colors.rotate_right(i as usize);
+        rgba_colors.rotate_right(i as usize % pixels.len());
         ModR::Pixels(rgba_colors)
     }
 }
