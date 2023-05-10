@@ -17,7 +17,7 @@ fn main() {
 
     if let Some(imp) = params.get("imp") {
         runtime::common::run(
-            Box::new(WeatherD::update(imp.clone())),
+            Box::new(gradient::Gradient::update(imp.clone())),
             Box::new(runtime::wasm::Wasm::new(WasmInit {
                 selector: ".pix".to_string(),
             })),
