@@ -1,7 +1,7 @@
 use std::str::FromStr;
 
 use enterpolation::{
-    linear::ConstEquidistantLinear,
+    linear::{ConstEquidistantLinear},
     Curve,
 };
 use stripper::{
@@ -56,12 +56,13 @@ impl Module for Gradient {
     }
     fn render(&mut self, i: u32, pixels: &Pixels) -> ModR {
         let thing =
-            ConstEquidistantLinear::<f32, _, 2>::equidistant_unchecked(vec_to_arr(self.0.clone()));
-        let rgba_colors: Vec<Rgba> = thing
+            ConstEquidistantLinear::<f32, _, 3>::equidistant_unchecked(vec_to_arr(self.0.clone()));
+        let mut rgba_colors: Vec<Rgba> = thing
             .take(pixels.len())
             .map(|c| Srgba::<f32>::from_linear(c.with_alpha(1.0)))
             .map(|c| Srgba::new(c.red * 255.0, c.green * 255.0, c.blue * 255.0, 1.0))
             .collect();
+        rgba_colors.rotate_right(i as usize % pixels.len());
         ModR::Pixels(rgba_colors)
     }
 }

@@ -8,7 +8,7 @@ use weather::WeatherD;
 #[wasm_bindgen(start)]
 fn main() {
     runtime::common::run(
-        Box::new(gradient::Gradient::update("#f222ad,#2253f2".to_string())),
+        Box::new(gradient::Gradient::update("#FFD700,#FF69B4,#00CED1".to_string())),
         Box::new(runtime::wasm::Wasm::new(WasmInit {
             selector: ".pix".to_string(),
         })),
