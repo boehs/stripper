@@ -6,9 +6,9 @@ mod weather;
 
 use std::{rc::Rc};
 
-use embassy_time::{Duration, Timer};
+use embassy_time::{Duration, Ticker};
 use stripper::{
-    runtime::{self, wasm::{WasmInit, Wasm}, Runtime},
+    runtime::{wasm::{WasmInit, Wasm}, Runtime},
     Module, Pixels, primitives::color::Rgba, ModR,
 };
 use embassy_executor::Spawner;
@@ -39,6 +39,7 @@ async fn main(spawner: Spawner) {
                     let pixels: Pixels = vec![Rgba::new(0.0, 0.0, 0.0, 0.0); runtime.get_number_of_pixels().into()];
                     runtime.display(&pixels).expect("Error setting initial view");
                     let mut i = 0;
+                    let mut loop_regulater = Ticker::every(Duration::from_millis(30));
                     loop {
                         let render = Rc::get_mut(modt).expect("This went poorly").render(i.try_into().unwrap(), &pixels);
                         match render {
@@ -46,8 +47,7 @@ async fn main(spawner: Spawner) {
                             _ => Ok(())
                         };
                         i+=1;
-                        // Note: This is not good
-                        Timer::after(Duration::from_millis(30)).await;
+                        loop_regulater.next().await
                     };
                 }
             }
