@@ -1,6 +1,5 @@
 #[cfg(feature = "wasm")]
 pub mod wasm;
-pub mod common;
 
 use std::error::Error;
 
