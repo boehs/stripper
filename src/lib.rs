@@ -1,4 +1,10 @@
-use palette::rgb::{Rgba};
+#![feature(error_in_core)]
+#![no_std]
+#[macro_use]
+extern crate alloc;
+
+use alloc::{vec::Vec, string::String};
+use palette::rgb::Rgba;
 
 pub mod primitives;
 pub mod scene;

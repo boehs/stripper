@@ -1,6 +1,7 @@
-use std::str::FromStr;
+use core::str::FromStr;
 
-use enterpolation::{linear::Linear, Curve, Equidistant, Identity};
+use alloc::{string::String, vec::Vec};
+use enterpolation::{linear::Linear, Equidistant, Identity, Curve};
 use stripper::{
     primitives::color::{rgb::Rgb, Alpha, FromColor, Hsl, LinSrgb, Rgba, Srgb, Srgba, WithAlpha},
     ModR, Module, Pixels,

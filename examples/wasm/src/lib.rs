@@ -1,11 +1,14 @@
 #![feature(type_alias_impl_trait)]
 #![allow(incomplete_features)]
+#![no_std]
+
+#[macro_use]
+extern crate alloc;
 
 mod gradient;
 mod weather;
 
-use std::{rc::Rc};
-
+use alloc::{rc::Rc, vec::Vec, string::ToString};
 use embassy_time::{Duration, Ticker};
 use stripper::{
     runtime::{wasm::{WasmInit, Wasm}, Runtime},

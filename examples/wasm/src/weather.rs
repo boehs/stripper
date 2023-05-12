@@ -1,4 +1,4 @@
-use std::collections::VecDeque;
+use alloc::{collections::VecDeque, boxed::Box, string::String, vec::Vec};
 
 use rand::{Rng, SeedableRng};
 use stripper::{

@@ -1,8 +1,8 @@
 #[cfg(feature = "wasm")]
 pub mod wasm;
 
-use std::error::Error;
-
+use core::error::Error;
+use alloc::boxed::Box;
 use crate::Pixels;
 
 pub trait Runtime<T> {
