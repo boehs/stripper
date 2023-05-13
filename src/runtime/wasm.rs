@@ -2,11 +2,11 @@ use core::error::Error;
 
 use super::Runtime;
 use wasm_bindgen::prelude::*;
-use web_sys::HtmlElement;
+use web_sys::{HtmlElement, CssStyleDeclaration};
 use alloc::{vec::Vec, string::String, boxed::Box};
 
 pub struct Wasm {
-    pixels: Vec<HtmlElement>,
+    pixels: Vec<CssStyleDeclaration>,
 }
 
 pub struct WasmInit {
@@ -24,11 +24,11 @@ impl Runtime<WasmInit> for Wasm {
             .query_selector_all(&input.selector)
             .expect("error with query");
 
-        let mut elements: Vec<HtmlElement> = vec![];
+        let mut elements: Vec<CssStyleDeclaration> = vec![];
         for i in 0..nodes.length() {
             let node = nodes.item(i).expect("error getting node");
             if let Some(element) = node.dyn_ref::<HtmlElement>() {
-                elements.push(element.clone());
+                elements.push(element.clone().style());
             }
         }
         Self { pixels: elements }
@@ -37,7 +37,6 @@ impl Runtime<WasmInit> for Wasm {
         for (i, pixel) in self.pixels.iter().enumerate() {
             let color = pixels[i];
             pixel
-                .style()
                 .set_property(
                     "--color",
                     &format!(

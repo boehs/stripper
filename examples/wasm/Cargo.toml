@@ -32,3 +32,6 @@ features = [
   'Location',
   'UrlSearchParams'
 ]
+
+[profile.release]
+lto = true

@@ -1,4 +1,4 @@
-use alloc::{collections::VecDeque, boxed::Box, string::String, vec::Vec};
+use alloc::{boxed::Box, vec::Vec};
 
 use rand::{Rng, SeedableRng};
 use stripper::{
@@ -13,7 +13,7 @@ enum Timeframe {
 }
 
 struct Rain {
-    drops: VecDeque<(usize, f32)>,
+    drops: Vec<(usize, f32)>,
     drop_color: Rgba,
     bg_color: Rgba,
     lightning: Timeframe,
@@ -29,18 +29,19 @@ impl Weather for Rain {
         let mut rng = rand::rngs::SmallRng::from_entropy();
         // Add drop to queue
         if i % 3 == 0 {
-            self.drops.push_back((
+            self.drops.push((
                 rng.gen_range(0..pixel_size),
                 rng.gen_range(70..=100) as f32 * 0.01,
             ));
         }
         // Add drops to scene
-        for (i, drop) in self.drops.clone().iter().enumerate() {
-            canvas[drop.0] = self.bg_color.mix(self.drop_color, drop.1);
+        for (i, (row, intensity)) in self.drops.clone().iter().enumerate() {
+            canvas[*row] = self.bg_color.mix(self.drop_color, *intensity);
             if self.drops[i].1 == 0.00 {
                 self.drops.remove(i);
+            } else {
+                self.drops[i].1 = self.drops[i].1 - 0.02
             }
-            self.drops[i].1 = self.drops[i].1 - 0.02
         }
         // Add lightning
         if (i % 70) > 19 && self.lightning == Timeframe::Sometimes {
@@ -69,7 +70,7 @@ enum Sun {
 impl Weather for Sun {
     fn simulate(&mut self, i: u32, pixel_size: usize) -> Pixels {
         // Choose bg color
-        let bg: Rgba = if self == &Sun::Overcast {
+        let bg = if self == &Sun::Overcast {
             Rgba::new(220.0, 220.0, 220.0, 1.0)
         } else {
             Rgba::new(107.0, 212.0, 214.0, 1.0)
@@ -86,10 +87,11 @@ impl Weather for Sun {
         }
         // Add clouds
         if self != &Sun::Sunny {
-            ripple(20, Rgba::new(255.0, 255.0, 255.0, 1.0), 6, &mut canvas);
-            ripple(70, Rgba::new(255.0, 255.0, 255.0, 1.0), 6, &mut canvas);
-            ripple(130, Rgba::new(255.0, 255.0, 255.0, 1.0), 6, &mut canvas);
-            ripple(180, Rgba::new(255.0, 255.0, 255.0, 1.0), 6, &mut canvas);
+            let cloud = Rgba::new(255.0, 255.0, 255.0, 1.0);
+            ripple(20, cloud, 6, &mut canvas);
+            ripple(70, cloud, 6, &mut canvas);
+            ripple(130, cloud, 6, &mut canvas);
+            ripple(180, cloud, 6, &mut canvas);
         }
         canvas
     }
@@ -110,12 +112,12 @@ pub struct WeatherD {
 
 impl Module for WeatherD {
     /// Pass one of the weather types as a lowercase string
-    fn update(input: String) -> Self
+    fn update(input: &str) -> Self
     where
         Self: Sized,
     {
         WeatherD {
-            instance: match input.as_str() {
+            instance: match input {
                 "rainy" => Box::new(Rain {
                     drops: vec![].into(),
                     drop_color: Rgba::new(107.0, 137.0, 148.0, 1.0),

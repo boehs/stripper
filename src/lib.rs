@@ -24,6 +24,6 @@ pub enum ModR {
 }
 
 pub trait Module {
-	fn update(input: String) -> Self where Self: Sized;
+	fn update(input: &str) -> Self where Self: Sized;
 	fn render(&mut self, i: u32, pixels: &Pixels) -> ModR;
 }

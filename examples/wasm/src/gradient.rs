@@ -1,6 +1,6 @@
 use core::str::FromStr;
 
-use alloc::{string::String, vec::Vec};
+use alloc::vec::Vec;
 use enterpolation::{linear::Linear, Equidistant, Identity, Curve};
 use stripper::{
     primitives::color::{rgb::Rgb, Alpha, FromColor, Hsl, LinSrgb, Rgba, Srgb, Srgba, WithAlpha},
@@ -15,7 +15,7 @@ pub struct Rainbow;
 
 #[allow(deprecated)]
 impl Module for Rainbow {
-    fn update(_input: String) -> Self
+    fn update(_input: &str) -> Self
     where
         Self: Sized,
     {
@@ -63,7 +63,7 @@ impl Module for Gradient {
     /// Gradient::update("FFD700,FF69B4,00CED1,FF69B4,FFD700|5".to_string())
     /// Gradient::update("#fff,#420,#069".to_string())
     /// ```
-    fn update(input: String) -> Self
+    fn update(input: &str) -> Self
     where
         Self: Sized,
     {

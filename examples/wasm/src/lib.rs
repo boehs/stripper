@@ -12,7 +12,7 @@ use alloc::{rc::Rc, vec::Vec, string::ToString};
 use embassy_time::{Duration, Ticker};
 use stripper::{
     runtime::{wasm::{WasmInit, Wasm}, Runtime},
-    Module, Pixels, primitives::color::Rgba, ModR,
+    Module, primitives::color::Rgba, ModR,
 };
 use embassy_executor::Spawner;
 
@@ -24,7 +24,6 @@ async fn main(spawner: Spawner) {
             .location()
             .search()
             .expect("No search")
-            .to_string()
             .into(),
     )
     .expect("Failed parsing params");
@@ -34,12 +33,12 @@ async fn main(spawner: Spawner) {
             if let Ok(i) = usize::from_str_radix(&idx, 10) {
                 // Todo: How to support unconstructed varients
                 let mut v: Vec<Rc<dyn Module>> = vec![
-                    Rc::new(gradient::Gradient::update(imp.clone())),
-                    Rc::new(weather::WeatherD::update(imp.clone())),
+                    Rc::new(gradient::Gradient::update(&imp)),
+                    Rc::new(weather::WeatherD::update(&imp)),
                 ];
                 if let Some(modt) = v.get_mut(i) {
                     let runtime = Wasm::new(WasmInit { selector: ".pix".to_string() });
-                    let pixels: Pixels = vec![Rgba::new(0.0, 0.0, 0.0, 0.0); runtime.get_number_of_pixels().into()];
+                    let pixels = vec![Rgba::new(0.0, 0.0, 0.0, 0.0); runtime.get_number_of_pixels().into()];
                     runtime.display(&pixels).expect("Error setting initial view");
                     let mut i = 0;
                     let mut loop_regulater = Ticker::every(Duration::from_millis(30));
