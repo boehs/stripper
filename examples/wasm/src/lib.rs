@@ -37,7 +37,7 @@ async fn main(_spawner: Spawner) {
                     Rc::new(weather::WeatherD::update(&imp)),
                 ];
                 if let Some(modt) = v.get_mut(i) {
-                    let runtime = Wasm::new(WasmInit { selector: ".pix".to_string() });
+                    let mut runtime = Wasm::new(WasmInit { selector: ".pix".to_string() });
                     let pixels = vec![Rgba::new(0.0, 0.0, 0.0, 0.0); runtime.get_number_of_pixels().into()];
                     runtime.display(&pixels).expect("Error setting initial view");
                     let mut i = 0;

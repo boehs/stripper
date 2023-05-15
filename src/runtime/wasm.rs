@@ -33,7 +33,7 @@ impl Runtime<WasmInit> for Wasm {
         }
         Self { pixels: elements }
     }
-    fn display(&self, pixels: &crate::Pixels) -> Result<(), Box<dyn Error>> {
+    fn display(&mut self, pixels: &crate::Pixels) -> Result<(), Box<dyn Error>> {
         for (i, pixel) in self.pixels.iter().enumerate() {
             let color = pixels[i];
             pixel
