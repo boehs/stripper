@@ -3,7 +3,7 @@
 #[macro_use]
 extern crate alloc;
 
-use alloc::{vec::Vec, string::String};
+use alloc::vec::Vec;
 use palette::rgb::Rgba;
 
 pub mod primitives;

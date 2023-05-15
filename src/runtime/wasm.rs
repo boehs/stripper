@@ -2,7 +2,7 @@ use core::error::Error;
 
 use super::Runtime;
 use wasm_bindgen::prelude::*;
-use web_sys::{HtmlElement, CssStyleDeclaration};
+use web_sys::CssStyleDeclaration;
 use alloc::{vec::Vec, string::String, boxed::Box};
 
 pub struct Wasm {

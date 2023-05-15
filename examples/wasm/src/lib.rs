@@ -17,7 +17,7 @@ use stripper::{
 use embassy_executor::Spawner;
 
 #[embassy_executor::main]
-async fn main(spawner: Spawner) {
+async fn main(_spawner: Spawner) {
     let window = web_sys::window().expect("no global `window` exists");
     let params = web_sys::UrlSearchParams::new_with_str_sequence_sequence(
         &window
