@@ -1,5 +1,4 @@
 use alloc::vec::Vec;
-pub use easer::functions::*;
 
 /// Warning! Call sort on the vector before passing
 ///

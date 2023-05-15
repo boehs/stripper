@@ -1,3 +1,3 @@
 pub mod color;
-pub mod image;
 pub mod tween;
+pub mod looper;
