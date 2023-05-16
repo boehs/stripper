@@ -53,9 +53,9 @@ impl Runtime<()> for Express {
     ) -> Result<(), alloc::boxed::Box<dyn core::error::Error>> {
         self.np.write(brightness(pixels.iter().map(|x| {
             RGB::new(
-                (x.red * 256.0) as u8,
-                (x.green * 256.0) as u8,
-                (x.blue * 256.0) as u8,
+                (x.red * 1.0) as u8,
+                (x.green * 1.0) as u8,
+                (x.blue * 1.0) as u8,
             )
         }),30));
         Ok(())

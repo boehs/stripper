@@ -6,7 +6,7 @@ edition = "2021"
 
 [dependencies]
 stripper = { path="../../", features=["express"] }
-#patterns = { path="../patterns" }
+patterns = { path="../patterns" }
 circuit_playground_express = {version="0.11.0"}
 alloc-cortex-m = "0.4.4"
 cortex-m-rt = "0.7.3"

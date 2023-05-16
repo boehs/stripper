@@ -27,8 +27,8 @@ fn main() -> ! {
     unsafe { ALLOCATOR.init(cortex_m_rt::heap_start() as usize, HEAP_SIZE) };
 
     let mut runtime = Express::new(());
-    //let mut grad = patterns::Gradient::update("FFD700,FF69B4,00CED1,FF69B4,FFD700|5");
-    let pixels = vec![Rgba::new(0.1, 0.5, 0.3, 0.0); runtime.get_number_of_pixels().into()];
+    let mut grad = patterns::Gradient::update("FFD700,FF69B4,00CED1,FF69B4,FFD700|5");
+    let pixels = vec![Rgba::new(0.0, 0.0, 0.0, 0.0); runtime.get_number_of_pixels().into()];
 
     let mut i = 0;
 

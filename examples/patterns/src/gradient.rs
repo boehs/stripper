@@ -1,7 +1,7 @@
-use core::str::FromStr;
+use core::{str::FromStr, ops::Deref};
 
 use alloc::vec::Vec;
-use enterpolation::{linear::Linear, Equidistant, Identity, Curve};
+use enterpolation::{linear::Linear, Equidistant, Identity, Curve, Generator, DiscreteGenerator};
 use stripper::{
     primitives::color::{rgb::Rgb, Alpha, FromColor, Hsl, LinSrgb, Rgba, Srgb, Srgba, WithAlpha},
     ModR, Module, Pixels,
@@ -12,6 +12,21 @@ use stripper::{
 )]
 /// This module renders a rainbow by
 pub struct Rainbow;
+
+struct IAmGoingCrazy<T>(pub Vec<T>);
+impl<T: Copy> Generator<usize> for IAmGoingCrazy<T> {
+    type Output = T;
+    fn gen(&self, input: usize) -> Self::Output {
+        self.0[input]
+    }
+}
+
+// Implement DiscreteGenerator for IAmGoingCrazy<T>
+impl<T: Copy> DiscreteGenerator for IAmGoingCrazy<T> {
+    fn len(&self) -> usize {
+        self.0.len()
+    }
+}
 
 #[allow(deprecated)]
 impl Module for Rainbow {
@@ -78,7 +93,7 @@ impl Module for Gradient {
         // Better solution! https://github.com/NicolasKlenert/enterpolation/discussions/22
         // Move this to update
         let thing = Linear::new_unchecked(
-            self.0.clone(),
+            IAmGoingCrazy(self.0.clone()),
             Equidistant::<f32>::normalized(self.0.len()),
             Identity::new(),
         );

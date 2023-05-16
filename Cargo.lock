@@ -591,8 +591,7 @@ dependencies = [
 [[package]]
 name = "enterpolation"
 version = "0.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dedc91505dc06c0969a1488e2177867119ee63be97de98bd47dcfaa07cc97813"
+source = "git+https://github.com/boehs/enterpolation.git?branch=patch-1#60ced2f34cb2cde2ec227036c9e683e3be3d6d9d"
 dependencies = [
  "assert_float_eq",
  "num-traits",
@@ -628,6 +627,7 @@ dependencies = [
  "circuit_playground_express",
  "cortex-m-rt",
  "panic-halt",
+ "patterns",
  "stripper",
 ]
 
@@ -1150,7 +1150,6 @@ checksum = "9f746c4065a8fa3fe23974dd82f15431cc8d40779821001404d10d2e79ca7d79"
 name = "patterns"
 version = "0.1.0"
 dependencies = [
- "critical-section",
  "enterpolation",
  "stripper",
 ]
@@ -1619,8 +1618,7 @@ dependencies = [
 [[package]]
 name = "topology-traits"
 version = "0.1.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6f34076ac0a15d54be52883b0987cb1b35dddede52ce4003c7a3a3490a9252ec"
+source = "git+https://github.com/boehs/topology-traits.git?branch=patch-1#c84c103907ff276874bf03b1106d4081b71f7702"
 dependencies = [
  "num-traits",
 ]
