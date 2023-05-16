@@ -5,7 +5,6 @@ use enterpolation::{linear::Linear, Curve, DiscreteGenerator, Equidistant, Gener
 use stripper::{
     primitives::{
         color::{rgb::Rgb, Alpha, FromColor, Hsl, Rgba, Srgb, Srgba, WithAlpha},
-        tween::get_wrapped_from_len,
     },
     ModR, Module, Pixels,
 };
@@ -111,10 +110,11 @@ impl Module for Gradient {
         Gradient(thing, lent)
     }
     fn render(&mut self, i: u32, pixels: &Pixels) -> ModR {
-        ModR::Pixels(get_wrapped_from_len(
-            &self.0,
-            i as usize % (pixels.len() as f64 * self.1) as usize,
-            pixels.len(),
-        ))
+        let mut rgb = self.0.clone();
+        rgb.rotate_right(i as usize % (pixels.len() as f64 * self.1) as usize);
+        rgb.truncate(pixels.len());
+        ModR::Pixels(
+            rgb
+        )
     }
 }
