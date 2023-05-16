@@ -7,14 +7,9 @@ edition = "2021"
 [dependencies]
 stripper = { path="../../" }
 #rand = { version="0.8.5", features=["small_rng"] }
-enterpolation = { version="0.2.0", features=["libm", "linear"] }
+enterpolation = { version="0.2.0", features=["libm", "linear"], default-features = false }
 #getrandom = { version = "0.2", features = ["js"] }
 critical-section = { version = "1.1" }
-
-[dependencies.num-traits]
-version = "0.2"
-default-features = false
-features = ["libm"]    # <--- Uncomment if you wish to use `Float` and `Real` without `std`
 
 [profile.release]
 lto = true
