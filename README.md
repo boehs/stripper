@@ -11,3 +11,5 @@ Generally, I've chosen interportability over performance here.
 - You can write rust
 - You will be happy about writing rust
 - The number of pixels is static
+
+Edit: So it turns out my code is terrible and should be fixed

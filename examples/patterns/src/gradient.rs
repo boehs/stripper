@@ -1,9 +1,9 @@
-use core::{str::FromStr, ops::Deref};
+use core::str::FromStr;
 
 use alloc::vec::Vec;
-use enterpolation::{linear::Linear, Equidistant, Identity, Curve, Generator, DiscreteGenerator};
+use enterpolation::{linear::Linear, Curve, DiscreteGenerator, Equidistant, Generator, Identity};
 use stripper::{
-    primitives::color::{rgb::Rgb, Alpha, FromColor, Hsl, LinSrgb, Rgba, Srgb, Srgba, WithAlpha},
+    primitives::color::{encoding, rgb::Rgb, Alpha, FromColor, Hsl, Rgba, Srgb, Srgba, WithAlpha},
     ModR, Module, Pixels,
 };
 
@@ -13,6 +13,7 @@ use stripper::{
 /// This module renders a rainbow by
 pub struct Rainbow;
 
+#[derive(Clone)]
 struct IAmGoingCrazy<T>(pub Vec<T>);
 impl<T: Copy> Generator<usize> for IAmGoingCrazy<T> {
     type Output = T;
@@ -64,7 +65,15 @@ impl Module for Rainbow {
 /// To slow the gradient down (without changing the view), change the framerate.
 ///
 /// The first `pixels.len()` of the final pixels are visible.
-pub struct Gradient(Vec<LinSrgb>, f64);
+#[derive(Clone)]
+pub struct Gradient(
+    enterpolation::linear::Linear<
+        Equidistant<f32>,
+        IAmGoingCrazy<Rgb<stripper::primitives::color::encoding::Linear<encoding::Srgb>>>,
+        Identity,
+    >,
+    f64,
+);
 
 impl Module for Gradient {
     /// Comma seperated hex values, 3 or 6 letters, # optional, whitespace optional.
@@ -87,23 +96,38 @@ impl Module for Gradient {
             .split(",")
             .flat_map(|x| Srgb::from_str(x.trim_start()).map(|c| c.into_linear()))
             .collect::<Vec<_>>();
-        Gradient(colors,base.get(1).map(|v| f64::from_str(v).unwrap_or(1.0)).unwrap_or(1.0))
-    }
-    fn render(&mut self, i: u32, pixels: &Pixels) -> ModR {
-        // Better solution! https://github.com/NicolasKlenert/enterpolation/discussions/22
-        // Move this to update
+        let len = colors.len();
         let thing = Linear::new_unchecked(
-            IAmGoingCrazy(self.0.clone()),
-            Equidistant::<f32>::normalized(self.0.len()),
+            IAmGoingCrazy(colors),
+            Equidistant::<f32>::normalized(len),
             Identity::new(),
         );
-        let mut rgba_colors: Vec<Rgba> = thing
+        Gradient(
+            thing,
+            base.get(1)
+                .map(|v| f64::from_str(v).unwrap_or(1.0))
+                .unwrap_or(1.0),
+        )
+    }
+    fn render(&mut self, i: u32, pixels: &Pixels) -> ModR {
+        let mut rgba_colors: Vec<Rgba> = self
+            .0
+            .clone()
             .take((pixels.len() as f64 * self.1) as usize)
             .map(|c| Srgba::<f32>::from_linear(c.with_alpha(1.0)))
-            .map(|c| Srgba::new(c.red * 255.0, c.green * 255.0, c.blue * 255.0, 1.0))
             .collect();
         rgba_colors.rotate_right(i as usize % (pixels.len() as f64 * self.1) as usize);
         rgba_colors.truncate(pixels.len());
+
+        /*ModR::Pixels(
+            rgba_colors
+                .into_iter()
+                .cycle()
+                .skip(i as usize)
+                .take(pixels.len())
+                .collect::<Vec<_>>(),
+        )*/
+
         ModR::Pixels(rgba_colors)
     }
 }

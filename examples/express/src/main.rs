@@ -8,7 +8,7 @@ use panic_halt as _;
 #[macro_use]
 extern crate alloc;
 
-use bsp::{entry, hal::prelude::*};
+use bsp::entry;
 use circuit_playground_express as bsp;
 use stripper::{
     primitives::color::Rgba,

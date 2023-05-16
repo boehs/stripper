@@ -41,7 +41,7 @@ impl Runtime<WasmInit> for Wasm {
                     "--color",
                     &format!(
                         "{},{},{}",
-                        color.red as u8, color.green as u8, color.blue as u8
+                        (color.red * 255.0) as u8, (color.green * 255.0) as u8, (color.blue * 255.0) as u8
                     ),
                 )
                 .expect(&format!("could not set the style for el {}", i));
