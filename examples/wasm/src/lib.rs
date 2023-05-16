@@ -5,9 +5,6 @@
 #[macro_use]
 extern crate alloc;
 
-mod gradient;
-mod weather;
-
 use alloc::{rc::Rc, vec::Vec, string::ToString};
 use embassy_time::{Duration, Ticker};
 use stripper::{
@@ -33,8 +30,8 @@ async fn main(_spawner: Spawner) {
             if let Ok(i) = usize::from_str_radix(&idx, 10) {
                 // Todo: How to support unconstructed varients
                 let mut v: Vec<Rc<dyn Module>> = vec![
-                    Rc::new(gradient::Gradient::update(&imp)),
-                    Rc::new(weather::WeatherD::update(&imp)),
+                    Rc::new(patterns::Gradient::update(&imp)),
+                    Rc::new(patterns::Weather::update(&imp)),
                 ];
                 if let Some(modt) = v.get_mut(i) {
                     let mut runtime = Wasm::new(WasmInit { selector: ".pix".to_string() });
