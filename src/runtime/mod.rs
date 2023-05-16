@@ -1,14 +1,12 @@
 #[cfg(feature = "wasm")]
 pub mod wasm;
-
 #[cfg(feature = "pico")]
 pub mod pico;
+#[cfg(feature = "express")]
 pub mod express;
 
 use core::error::Error;
 use alloc::boxed::Box;
-use palette::{Alpha, rgb::Rgb};
-use smart_leds::{RGB, RGBA};
 use crate::Pixels;
 
 pub trait Runtime<T> {

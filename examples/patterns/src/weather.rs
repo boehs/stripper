@@ -1,6 +1,6 @@
 use alloc::{boxed::Box, vec::Vec};
 
-use rand::{Rng, SeedableRng};
+//use rand::{Rng, SeedableRng};
 use stripper::{
     primitives::color::{ripple, Mix, Rgba},
     Module, Pixels,
@@ -26,7 +26,7 @@ trait Weather {
 impl Weather for Rain {
     fn simulate(&mut self, i: u32, pixel_size: usize) -> Pixels {
         let mut canvas = vec![self.bg_color; pixel_size];
-        let mut rng = rand::rngs::SmallRng::from_entropy();
+        /*let mut rng = rand::rngs::SmallRng::from_entropy();
         // Add drop to queue
         if i % 3 == 0 {
             self.drops.push((
@@ -42,7 +42,7 @@ impl Weather for Rain {
             } else {
                 self.drops[i].1 = self.drops[i].1 - 0.02
             }
-        }
+        }*/
         // Add lightning
         if (i % 70) > 19 && self.lightning == Timeframe::Sometimes {
             canvas = canvas

@@ -9,6 +9,11 @@ stripper = { path="../../", features=["express"] }
 patterns = { path="../patterns" }
 circuit_playground_express = {version="0.11.0"}
 
+[dependencies.num-traits]
+version = "0.2"
+default-features = false
+# features = ["libm"]    # <--- Uncomment if you wish to use `Float` and `Real` without `std`
+
 [profile.release]
 debug = true
 
