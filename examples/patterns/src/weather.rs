@@ -112,7 +112,7 @@ pub struct WeatherD {
 
 impl Module for WeatherD {
     /// Pass one of the weather types as a lowercase string
-    fn update(input: &str) -> Self
+    fn update(input: &str, _n: usize) -> Self
     where
         Self: Sized,
     {

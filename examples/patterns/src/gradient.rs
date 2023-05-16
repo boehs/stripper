@@ -1,10 +1,10 @@
-use core::str::FromStr;
+use core::{str::FromStr};
 
 use alloc::vec::Vec;
 use enterpolation::{linear::Linear, Curve, DiscreteGenerator, Equidistant, Generator, Identity};
 use stripper::{
     primitives::{
-        color::{encoding, rgb::Rgb, Alpha, FromColor, Hsl, Rgba, Srgb, Srgba, WithAlpha},
+        color::{rgb::Rgb, Alpha, FromColor, Hsl, Rgba, Srgb, Srgba, WithAlpha},
         tween::get_wrapped_from_len,
     },
     ModR, Module, Pixels,
@@ -34,7 +34,7 @@ impl<T: Copy> DiscreteGenerator for IAmGoingCrazy<T> {
 
 #[allow(deprecated)]
 impl Module for Rainbow {
-    fn update(_input: &str) -> Self
+    fn update(_input: &str, _n: usize) -> Self
     where
         Self: Sized,
     {
@@ -69,14 +69,7 @@ impl Module for Rainbow {
 ///
 /// The first `pixels.len()` of the final pixels are visible.
 #[derive(Clone)]
-pub struct Gradient(
-    enterpolation::linear::Linear<
-        Equidistant<f32>,
-        IAmGoingCrazy<Rgb<stripper::primitives::color::encoding::Linear<encoding::Srgb>>>,
-        Identity,
-    >,
-    f64,
-);
+pub struct Gradient(Vec<Alpha<Rgb, f32>>, f64);
 
 impl Module for Gradient {
     /// Comma seperated hex values, 3 or 6 letters, # optional, whitespace optional.
@@ -90,7 +83,7 @@ impl Module for Gradient {
     /// Gradient::update("FFD700,FF69B4,00CED1,FF69B4,FFD700|5".to_string())
     /// Gradient::update("#fff,#420,#069".to_string())
     /// ```
-    fn update(input: &str) -> Self
+    fn update(input: &str, n: usize) -> Self
     where
         Self: Sized,
     {
@@ -99,42 +92,27 @@ impl Module for Gradient {
             .split(",")
             .flat_map(|x| Srgb::from_str(x.trim_start()).map(|c| c.into_linear()))
             .collect::<Vec<_>>();
+
+        let lent = base
+            .get(1)
+            .map(|v| f64::from_str(v).unwrap_or(1.0))
+            .unwrap_or(1.0);
+
         let len = colors.len();
         let thing = Linear::new_unchecked(
             IAmGoingCrazy(colors),
             Equidistant::<f32>::normalized(len),
             Identity::new(),
-        );
-        Gradient(
-            thing,
-            base.get(1)
-                .map(|v| f64::from_str(v).unwrap_or(1.0))
-                .unwrap_or(1.0),
         )
+        .take((n as f64 * lent) as usize)
+        .map(|c| Srgba::<f32>::from_linear(c.with_alpha(1.0)))
+        .collect::<Vec<_>>();
+
+        Gradient(thing, lent)
     }
     fn render(&mut self, i: u32, pixels: &Pixels) -> ModR {
-        let rgba_colors: Vec<Rgba> = self
-            .0
-            .clone()
-            .take((pixels.len() as f64 * self.1) as usize)
-            .map(|c| Srgba::<f32>::from_linear(c.with_alpha(1.0)))
-            .collect();
-        // Attempt 1
-        /*
-        rgba_colors.rotate_right(i as usize % (pixels.len() as f64 * self.1) as usize);
-        rgba_colors.truncate(pixels.len());*/
-        // Attempt 2
-        /*ModR::Pixels(
-            rgba_colors
-                .into_iter()
-                .cycle()
-                .skip(i as usize)
-                .take(pixels.len())
-                .collect::<Vec<_>>(),
-        )*/
-        // Attempt 3
         ModR::Pixels(get_wrapped_from_len(
-            &rgba_colors,
+            &self.0,
             i as usize % (pixels.len() as f64 * self.1) as usize,
             pixels.len(),
         ))
