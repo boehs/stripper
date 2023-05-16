@@ -19,7 +19,7 @@ use stripper::{
 // this is the allocator the application will use
 #[global_allocator]
 static ALLOCATOR: CortexMHeap = CortexMHeap::empty();
-const HEAP_SIZE: usize = 1024; // in bytes
+const HEAP_SIZE: usize = 16384 ; // in bytes
 
 #[entry]
 fn main() -> ! {
@@ -27,7 +27,7 @@ fn main() -> ! {
     unsafe { ALLOCATOR.init(cortex_m_rt::heap_start() as usize, HEAP_SIZE) };
 
     let mut runtime = Express::new(());
-    let mut grad = patterns::Gradient::update("#ff0000, #ff9a00, #d0de21, #4fdc4a, #3fdad8, #2fc9e2, #1c7fee, #5f15f2, #ba0cf8, #fb07d9, #ff0000");
+    let mut grad = patterns::Gradient::update("#ff0000, #ff9a00, #d0de21, #4fdc4a, #3fdad8, #2fc9e2, #1c7fee, #5f15f2, #ba0cf8, #fb07d9, #ff0000|30");
     let pixels = vec![Rgba::new(0.0, 5.0, 30.0, 0.0); (runtime.get_number_of_pixels() + 1).into()];
 
     let mut i = 0;
@@ -37,7 +37,6 @@ fn main() -> ! {
             runtime.display(&pix);
         }
         i+=1;
-        runtime.timer.delay_ms(30u8);
     }
 }
 
