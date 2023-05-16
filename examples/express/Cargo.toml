@@ -1,0 +1,17 @@
+[package]
+name = "express"
+version = "0.1.0"
+authors = ["Evan Boehs"]
+edition = "2021"
+
+[dependencies]
+stripper = { path="../../", features=["express"] }
+patterns = { path="../patterns" }
+circuit_playground_express = {version="0.11.0"}
+
+[profile.release]
+debug = true
+
+# for cargo flash
+[package.metadata]
+chip = "ATSAMD21G18A"

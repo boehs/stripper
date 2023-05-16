@@ -629,6 +629,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "express"
+version = "0.1.0"
+dependencies = [
+ "circuit_playground_express",
+ "patterns",
+ "stripper",
+]
+
+[[package]]
 name = "fast-srgb8"
 version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
