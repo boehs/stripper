@@ -3,7 +3,10 @@ use core::str::FromStr;
 use alloc::vec::Vec;
 use enterpolation::{linear::Linear, Curve, DiscreteGenerator, Equidistant, Generator, Identity};
 use stripper::{
-    primitives::color::{encoding, rgb::Rgb, Alpha, FromColor, Hsl, Rgba, Srgb, Srgba, WithAlpha},
+    primitives::{
+        color::{encoding, rgb::Rgb, Alpha, FromColor, Hsl, Rgba, Srgb, Srgba, WithAlpha},
+        tween::get_wrapped_from_len,
+    },
     ModR, Module, Pixels,
 };
 
@@ -110,15 +113,17 @@ impl Module for Gradient {
         )
     }
     fn render(&mut self, i: u32, pixels: &Pixels) -> ModR {
-        let mut rgba_colors: Vec<Rgba> = self
+        let rgba_colors: Vec<Rgba> = self
             .0
             .clone()
             .take((pixels.len() as f64 * self.1) as usize)
             .map(|c| Srgba::<f32>::from_linear(c.with_alpha(1.0)))
             .collect();
+        // Attempt 1
+        /*
         rgba_colors.rotate_right(i as usize % (pixels.len() as f64 * self.1) as usize);
-        rgba_colors.truncate(pixels.len());
-
+        rgba_colors.truncate(pixels.len());*/
+        // Attempt 2
         /*ModR::Pixels(
             rgba_colors
                 .into_iter()
@@ -127,7 +132,11 @@ impl Module for Gradient {
                 .take(pixels.len())
                 .collect::<Vec<_>>(),
         )*/
-
-        ModR::Pixels(rgba_colors)
+        // Attempt 3
+        ModR::Pixels(get_wrapped_from_len(
+            &rgba_colors,
+            i as usize % (pixels.len() as f64 * self.1) as usize,
+            pixels.len(),
+        ))
     }
 }
