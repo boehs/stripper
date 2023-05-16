@@ -5,7 +5,7 @@ use bsp::{
     pac::{CorePeripherals, Peripherals},
 };
 use circuit_playground_express as bsp;
-use smart_leds::{SmartLedsWrite, RGB};
+use smart_leds::{SmartLedsWrite, RGB, brightness};
 use ws2812_timer_delay as ws2812;
 
 pub struct Express {
@@ -51,13 +51,13 @@ impl Runtime<()> for Express {
         &mut self,
         pixels: &crate::Pixels,
     ) -> Result<(), alloc::boxed::Box<dyn core::error::Error>> {
-        self.np.write(pixels.iter().map(|x| {
+        self.np.write(brightness(pixels.iter().map(|x| {
             RGB::new(
                 (x.red * 256.0) as u8,
                 (x.green * 256.0) as u8,
                 (x.blue * 256.0) as u8,
             )
-        }));
+        }),30));
         Ok(())
     }
 
