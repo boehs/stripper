@@ -57,7 +57,7 @@ impl Runtime<()> for Express {
                 (x.green * 1.0) as u8,
                 (x.blue * 1.0) as u8,
             )
-        }),30));
+        }),5));
         Ok(())
     }
 
