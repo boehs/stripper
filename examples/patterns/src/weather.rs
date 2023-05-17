@@ -1,6 +1,6 @@
 use alloc::{boxed::Box, vec::Vec};
 
-//use rand::{Rng, SeedableRng};
+use rand::{Rng, SeedableRng};
 use stripper::{
     primitives::color::{ripple, Mix, Rgba},
     Module, Pixels,
@@ -26,9 +26,11 @@ trait Weather {
 impl Weather for Rain {
     fn simulate(&mut self, i: u32, pixel_size: usize) -> Pixels {
         let mut canvas = vec![self.bg_color; pixel_size];
-        /*let mut rng = rand::rngs::SmallRng::from_entropy();
+        let mut rng = rand::rngs::SmallRng::seed_from_u64(i.into());
         // Add drop to queue
-        if i % 3 == 0 {
+        // We want, roughly, 20% of the canvas to have a raindrop.
+        // Each raindrop takes 40 frames or so to disappear, so theroretically,
+        if i % 5 == 0 {
             self.drops.push((
                 rng.gen_range(0..pixel_size),
                 rng.gen_range(70..=100) as f32 * 0.01,
@@ -42,14 +44,14 @@ impl Weather for Rain {
             } else {
                 self.drops[i].1 = self.drops[i].1 - 0.02
             }
-        }*/
+        }
         // Add lightning
         if (i % 70) > 19 && self.lightning == Timeframe::Sometimes {
             canvas = canvas
                 .iter()
                 .map(|&p| {
                     p.mix(
-                        Rgba::new(255.0, 255.0, 255.0, 1.0),
+                        Rgba::new(1.0, 1.0, 1.0, 1.0),
                         0.5 - (0.025 * ((i % 70) - 19) as f32),
                     )
                 })
@@ -71,23 +73,23 @@ impl Weather for Sun {
     fn simulate(&mut self, i: u32, pixel_size: usize) -> Pixels {
         // Choose bg color
         let bg = if self == &Sun::Overcast {
-            Rgba::new(220.0, 220.0, 220.0, 1.0)
+            Rgba::new(0.863, 0.863, 0.863, 1.0)
         } else {
-            Rgba::new(107.0, 212.0, 214.0, 1.0)
+            Rgba::new(0.0, 0.0, 1.0, 1.0)
         };
         let mut canvas = vec![bg; pixel_size];
         // Add sun
         if self == &Sun::Mixed || self == &Sun::Sunny {
             ripple(
                 (i % pixel_size as u32) as u16,
-                Rgba::new(245.0, 183.0, 112.0, 1.0),
+                Rgba::new(0.7, 0.55, 0.13, 1.0),
                 7,
                 &mut canvas,
             );
         }
         // Add clouds
         if self != &Sun::Sunny {
-            let cloud = Rgba::new(255.0, 255.0, 255.0, 1.0);
+            let cloud = Rgba::new(1.0, 1.0, 1.0, 1.0);
             ripple(20, cloud, 6, &mut canvas);
             ripple(70, cloud, 6, &mut canvas);
             ripple(130, cloud, 6, &mut canvas);
@@ -120,14 +122,14 @@ impl Module for WeatherD {
             instance: match input {
                 "rainy" => Box::new(Rain {
                     drops: vec![].into(),
-                    drop_color: Rgba::new(107.0, 137.0, 148.0, 1.0),
-                    bg_color: Rgba::new(62.0, 76.0, 93.0, 1.0),
+                    drop_color: Rgba::new(0.42, 0.537, 0.58, 1.0),
+                    bg_color: Rgba::new(0.0, 0.0, 0.2, 1.0),
                     lightning: Timeframe::Never,
                 }),
                 "lightning" => Box::new(Rain {
                     drops: vec![].into(),
-                    drop_color: Rgba::new(107.0, 137.0, 148.0, 1.0),
-                    bg_color: Rgba::new(62.0, 76.0, 93.0, 1.0),
+                    drop_color: Rgba::new(0.004, 0.537, 0.58, 1.0),
+                    bg_color: Rgba::new(0.243, 0.298, 0.365, 1.0),
                     lightning: Timeframe::Sometimes,
                 }),
                 "sunny" => Box::new(Sun::Sunny),

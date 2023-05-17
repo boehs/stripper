@@ -6,6 +6,6 @@ edition = "2021"
 
 [dependencies]
 stripper = { path="../../" }
-#rand = { version="0.8.5", features=["small_rng"] }
+rand = { version="0.8.5", features=["small_rng", "alloc"], default-features=false }
 enterpolation = { git="https://github.com/boehs/enterpolation.git", branch="patch-1", features=["libm", "linear"], default-features = false }
 #getrandom = { version = "0.2", features = ["js"] }
